@@ -1,0 +1,15 @@
+<?php
+
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\TrackingController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [TrackingController::class, 'index'])->name('share.panel');
+Route::post('/share/create', [TrackingController::class, 'store'])->name('share.create');
+Route::get('/share/{token}', [TrackingController::class, 'show'])->name('share.show');
+Route::post('/share/{token}/update', [TrackingController::class, 'update'])->name('share.update');
+Route::delete('/share/{token}', [TrackingController::class, 'destroy'])->name('share.destroy');
+
+Route::get('/location', [LocationController::class, 'index'])->name('location.index');
+Route::post('/lookup', [LocationController::class, 'lookup'])->name('location.lookup');
+Route::post('/send-location', [LocationController::class, 'sendLocation'])->name('location.send');
