@@ -16,7 +16,9 @@ class LocationUpdate extends Model
         'device',
         'user_agent',
         'ip_address',
+        'public_ip',
         'operator',
+        'imei',
     ];
 
     public function trackingLink()

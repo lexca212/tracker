@@ -8,6 +8,7 @@ Route::get('/', [TrackingController::class, 'index'])->name('share.panel');
 Route::post('/share/create', [TrackingController::class, 'store'])->name('share.create');
 Route::get('/share/{token}', [TrackingController::class, 'show'])->name('share.show');
 Route::post('/share/{token}/update', [TrackingController::class, 'update'])->name('share.update');
+Route::get('/share/{token}/update', [TrackingController::class, 'redirectUpdateGet']);
 Route::delete('/share/{token}', [TrackingController::class, 'destroy'])->name('share.destroy');
 
 Route::get('/location', [LocationController::class, 'index'])->name('location.index');

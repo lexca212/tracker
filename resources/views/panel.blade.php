@@ -34,6 +34,9 @@
         .modal-row{ display:flex; gap:0.75rem; margin-bottom:0.5rem; }
         .modal-label{ min-width:110px; color:#475569; font-weight:700; }
         .modal-value{ color:#0f172a; word-break:break-word; }
+        .modal-history-table { width: 100%; border-collapse: collapse; margin-top:0.5rem; }
+        .modal-history-table th, .modal-history-table td { padding: 0.4rem 0.45rem; border: 1px solid #e2e8f0; font-size:0.85rem; text-align:left; }
+        .modal-history-table th { background:#f8fafc; color:#475569; }
         .badge { display: inline-flex; gap: 0.35rem; align-items: center; padding: 0.4rem 0.75rem; border-radius: 999px; background: #eef2ff; color: #1e3a8a; font-size: 0.85rem; }
         .link-button { color: #2563eb; text-decoration: none; font-weight: 700; }
         .muted { color: #64748b; }
@@ -118,6 +121,7 @@
                                                     data-ip="{{ $trackingLink->latestUpdate->ip_address ?? '' }}"
                                                     data-ua="{{ $trackingLink->latestUpdate->user_agent ?? '' }}"
                                                     data-time="{{ $trackingLink->latestUpdate ? $trackingLink->latestUpdate->created_at->format('d M Y H:i:s') : '' }}"
+                                                    data-updates='@json($trackingLink->updates)'
                                                 >Detil</button>
                                                 <button type="button" class="small-btn copy-link-btn" data-link="{{ url('/share/' . $trackingLink->token) }}" title="Salin tautan">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -210,6 +214,17 @@
             <div class="modal-row"><div class="modal-label">IP</div><div class="modal-value" id="detail-ip">-</div></div>
             <div class="modal-row"><div class="modal-label">User Agent</div><div class="modal-value" id="detail-ua">-</div></div>
             <div class="modal-row"><div class="modal-label">Waktu</div><div class="modal-value" id="detail-time">-</div></div>
+            <div class="modal-row"><div class="modal-label">Public IP</div><div class="modal-value" id="detail-public-ip">-</div></div>
+            <div class="modal-row"><div class="modal-label">IMEI</div><div class="modal-value" id="detail-imei">-</div></div>
+            <div class="modal-row"><div class="modal-label">Riwayat</div><div class="modal-value" id="detail-history-container">
+                <table class="modal-history-table" id="detail-history-table">
+                    <thead>
+                        <tr><th>Waktu</th><th>Koordinat</th><th>Perangkat</th><th>Operator</th><th>IP Publik</th><th>Maps</th></tr>
+                    </thead>
+                    <tbody id="detail-history-body"></tbody>
+                </table>
+                <div id="detail-history-empty" class="muted" style="display:none; margin-top:0.5rem;">Belum ada data lokasi sebelumnya.</div>
+            </div></div>
             <div style="margin-top:0.5rem;display:flex;gap:0.5rem;justify-content:flex-end;">
                 <a id="detail-maps-link" class="link-button" href="#" target="_blank">Buka di Maps</a>
             </div>
@@ -236,6 +251,8 @@
             document.getElementById('detail-ip').textContent = data.ip || '-';
             document.getElementById('detail-ua').textContent = data.ua || '-';
             document.getElementById('detail-time').textContent = data.time || '-';
+            document.getElementById('detail-public-ip').textContent = data.public_ip || '-';
+            document.getElementById('detail-imei').textContent = data.imei || '-';
             const mapsLink = document.getElementById('detail-maps-link');
             if (data.lat && data.lng) {
                 mapsLink.href = 'https://maps.google.com/?q=' + encodeURIComponent(data.lat + ',' + data.lng);
@@ -244,6 +261,46 @@
                 mapsLink.href = '#';
                 mapsLink.style.display = 'none';
             }
+
+            const historyBody = document.getElementById('detail-history-body');
+            const historyEmpty = document.getElementById('detail-history-empty');
+            historyBody.innerHTML = '';
+            if (Array.isArray(data.updates) && data.updates.length) {
+                data.updates.forEach(update => {
+                    const row = document.createElement('tr');
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = update.created_at ? update.created_at : '-';
+                    const coordCell = document.createElement('td');
+                    coordCell.textContent = update.latitude && update.longitude ? `${update.latitude}, ${update.longitude}` : '-';
+                    const deviceCell = document.createElement('td');
+                    deviceCell.textContent = update.device ?? '-';
+                    const operatorCell = document.createElement('td');
+                    operatorCell.textContent = update.operator ?? '-';
+                    const publicIpCell = document.createElement('td');
+                    publicIpCell.textContent = update.public_ip ?? '-';
+                    const mapCell = document.createElement('td');
+                    if (update.latitude && update.longitude) {
+                        const mapLink = document.createElement('a');
+                        mapLink.href = 'https://maps.google.com/?q=' + encodeURIComponent(`${update.latitude},${update.longitude}`);
+                        mapLink.target = '_blank';
+                        mapLink.textContent = 'Maps';
+                        mapCell.appendChild(mapLink);
+                    } else {
+                        mapCell.textContent = '-';
+                    }
+                    row.appendChild(timeCell);
+                    row.appendChild(coordCell);
+                    row.appendChild(deviceCell);
+                    row.appendChild(operatorCell);
+                    row.appendChild(publicIpCell);
+                    row.appendChild(mapCell);
+                    historyBody.appendChild(row);
+                });
+                historyEmpty.style.display = 'none';
+            } else {
+                historyEmpty.style.display = 'block';
+            }
+
             const back = document.getElementById('detail-backdrop');
             back.style.display = 'flex';
             back.setAttribute('aria-hidden','false');
@@ -300,6 +357,7 @@
             // Detail modal handlers
             document.querySelectorAll('.detail-btn').forEach(btn => {
                 btn.addEventListener('click', function(){
+                    const updates = JSON.parse(this.getAttribute('data-updates') || '[]');
                     const data = {
                         name: this.getAttribute('data-name'),
                         link: this.getAttribute('data-link'),
@@ -309,7 +367,8 @@
                         operator: this.getAttribute('data-operator'),
                         ip: this.getAttribute('data-ip'),
                         ua: this.getAttribute('data-ua'),
-                        time: this.getAttribute('data-time')
+                        time: this.getAttribute('data-time'),
+                        updates,
                     };
                     openDetailModal(data);
                 });

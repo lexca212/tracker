@@ -12,9 +12,12 @@ class TrackingController extends Controller
 {
     public function index()
     {
-        $trackingLinks = TrackingLink::with('latestUpdate')
-            ->orderByDesc('created_at')
-            ->get();
+        $trackingLinks = TrackingLink::with(['latestUpdate', 'updates' => function ($query) {
+            $query->orderByDesc('created_at');
+        }])
+        ->withCount('updates')
+        ->orderByDesc('created_at')
+        ->get();
 
         return view('panel', compact('trackingLinks'));
     }
@@ -54,6 +57,8 @@ class TrackingController extends Controller
             'device' => ['nullable', 'string', 'max:255'],
             'user_agent' => ['nullable', 'string'],
             'operator' => ['nullable', 'string', 'max:255'],
+            'public_ip' => ['nullable', 'string', 'max:45'],
+            'imei' => ['nullable', 'string', 'max:255'],
         ]);
 
         $locationUpdate = LocationUpdate::create([
@@ -63,7 +68,9 @@ class TrackingController extends Controller
             'device' => $data['device'] ?? 'Unknown device',
             'user_agent' => $data['user_agent'] ?? $request->userAgent(),
             'ip_address' => $request->ip(),
+            'public_ip' => $data['public_ip'] ?? null,
             'operator' => $data['operator'] ?? null,
+            'imei' => $data['imei'] ?? null,
         ]);
 
         return response()->json([
@@ -76,6 +83,8 @@ class TrackingController extends Controller
             'operator' => $locationUpdate->operator,
             'user_agent' => $locationUpdate->user_agent,
             'ip_address' => $locationUpdate->ip_address,
+            'public_ip' => $locationUpdate->public_ip,
+            'imei' => $locationUpdate->imei,
             'sent_at' => $locationUpdate->created_at->toDateTimeString(),
         ]);
     }
@@ -91,6 +100,11 @@ class TrackingController extends Controller
         $trackingLink->delete();
 
         return Redirect::route('share.panel')->with('success', 'Tautan berbagi telah dihapus.');
+    }
+
+    public function redirectUpdateGet(string $token)
+    {
+        return Redirect::route('share.show', ['token' => $token]);
     }
 
     protected function generateToken(): string
