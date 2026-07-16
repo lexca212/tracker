@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bagikan Lokasi</title>
+    <title>Salam Cair</title>
     <style>
         body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #f8fafc; color: #0f172a; }
         .container { width: min(720px, calc(100% - 2rem)); margin: 3rem auto; padding: 2rem; background: #ffffff; border-radius: 24px; box-shadow: 0 28px 80px rgba(15, 23, 42, 0.08); }
