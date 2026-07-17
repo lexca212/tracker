@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Salam Cair</title>
+    <title>UNDANDAN PERNIKAHAN</title>
     <style>
         body { margin: 0; font-family: 'Playfair Display', Georgia, serif; background: linear-gradient(135deg, #f9f3f0 0%, #f4ece8 100%); color: #2b2b2b; }
         .container { width: min(760px, calc(100% - 2rem)); margin: 3rem auto; padding: 2rem; background: rgba(255,255,255,0.96); border-radius: 32px; box-shadow: 0 28px 80px rgba(43, 43, 43, 0.12); border: 1px solid rgba(255,255,255,0.9); }
