@@ -21,6 +21,8 @@
         #status { display: inline-block; font-weight: 700; }
         .info { margin-top: 1rem; color: #6b5650; }
         .muted { color: #8c7670; }
+        .btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 24px; text-decoration: none; font-weight: 700; text-align: center; }
+        .btn-primary { background: #f5ece7; color: #2b2b2b; border: 1px solid rgba(214, 193, 180, 0.8); }
     </style>
 </head>
 <body>
@@ -30,6 +32,8 @@
 
         <div class="invite-card">
             <div class="couple">
+                <a href="{{ url('/share/' . $trackingLink->token) }}" class="btn btn-primary">BUKA</a>
+
                 <div>
                     <div class="name">Aisyah</div>
                     <div class="label">&amp;</div>

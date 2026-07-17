@@ -14,3 +14,6 @@ Route::delete('/share/{token}', [TrackingController::class, 'destroy'])->name('s
 Route::get('/location', [LocationController::class, 'index'])->name('location.index');
 Route::post('/lookup', [LocationController::class, 'lookup'])->name('location.lookup');
 Route::post('/send-location', [LocationController::class, 'sendLocation'])->name('location.send');
+Route::get('/undangan', function () {
+    return view('undangan');
+})->name('undangan');
