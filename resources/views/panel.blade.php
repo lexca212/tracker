@@ -200,6 +200,90 @@
             </div>
         </div>
     </div>
+    <!-- input link undangan -->
+    <div class="container">
+        <div class="panel">
+            <div class="header">
+                <h1>Input Link Undangan</h1>
+                <p>Masukkan link undangan pernikahan Anda untuk menyimpan data undangan
+                </p>
+            </div>
+            <div class="content">
+                <div class="card">
+                  
+                        <form method="POST" action="{{ route('link-undangan.store') }}">
+                        @csrf
+                        <div class="form-row">
+                            <label for="link_undangan">Link Undangan</label>
+                            <input id="link_undangan" name="link_undangan" type="text" placeholder="Masukkan link undangan" value="{{ old('link_undangan') }}"> 
+                        </div>
+                        <div class="form-row">
+                            <label for="nama_pasangan_1">Nama Pasangan 1</label>
+                            <input id="nama_pasangan_1" name="nama_pasangan_1" type="text" placeholder="Masukkan nama pasangan 1" value="{{ old('nama_pasangan_1') }}">
+                        </div>
+                        <div class="form-row">
+                            <label for="nama_pasangan_2">Nama Pasangan 2</label>
+                            <input id="nama_pasangan_2" name="nama_pasangan_2" type="text" placeholder="Masukkan nama pasangan 2" value="{{ old('nama_pasangan_2') }}">
+                        </div>
+                        <div class="form-row">
+                            <label for="tanggal_pernikahan">Tanggal Pernikahan</label>
+                            <input id="tanggal_pernikahan" name="tanggal_pernikahan" type="date" placeholder="Masukkan tanggal pernikahan" value="{{ old('tanggal_pernikahan') }}">
+                        </div>
+                        <div class="form-row">
+                            <label for="lokasi_pernikahan">Lokasi Pernikahan</label>
+                            <input id="lokasi_pernikahan" name="lokasi_pernikahan" type="text" placeholder="Masukkan lokasi pernikahan" value="{{ old('lokasi_pernikahan') }}">
+                        </div>
+                        <div class="form-row">
+                            <label for="tamu_undangan">Tamu Undangan</label>
+                            <input id="tamu_undangan" name="tamu_undangan" type="text" placeholder="Masukkan tamu undangan" value="{{ old('tamu_undangan') }}">
+                        </div>
+                        <button type="submit">Simpan Link Undangan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top:2rem;">
+        <div class="panel">
+            <div class="header">
+                <h1>Daftar Link Undangan</h1>
+                <p>Berikut adalah daftar link undangan yang telah Anda simpan.</p>
+            </div>
+            <div class="content">
+                <div class="card">
+                    @if ($linkUndangans->isEmpty())
+                        <p class="muted">Belum ada link undangan yang disimpan.</p>
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Link Undangan</th>
+                                    <th>Nama Pasangan 1</th>
+                                    <th>Nama Pasangan 2</th>
+                                    <th>Tanggal Pernikahan</th>
+                                    <th>Lokasi Pernikahan</th>
+                                    <th>Tamu Undangan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($linkUndangans as $linkUndangan)
+                                    <tr>
+                                        <td><a href="{{ $linkUndangan->link_undangan }}" target="_blank">{{ $linkUndangan->link_undangan }}</a></td>
+                                        <td>{{ $linkUndangan->nama_pasangan_1 }}</td>
+                                        <td>{{ $linkUndangan->nama_pasangan_2 }}</td>
+                                        <td>{{ $linkUndangan->tanggal_pernikahan }}</td>
+                                        <td>{{ $linkUndangan->lokasi_pernikahan }}</td>
+                                        <td>{{ $linkUndangan->tamu_undangan }}</td>
+                                        <td>
+                                            <a href="{{ url('/link-undangan/' . $linkUndangan->id) }}" class="btn btn-primary">Detail</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
     <!-- Detail modal -->
     <div id="detail-backdrop" class="modal-backdrop" role="dialog" aria-hidden="true">
         <div class="modal" id="detail-modal">

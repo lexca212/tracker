@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LocationUpdate;
 use App\Models\TrackingLink;
+use App\Models\LinkUndangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -19,7 +20,9 @@ class TrackingController extends Controller
         ->orderByDesc('created_at')
         ->get();
 
-        return view('panel', compact('trackingLinks'));
+        $linkUndangans = LinkUndangan::all();
+
+        return view('panel', compact('trackingLinks', 'linkUndangans'));
     }
 
     public function store(Request $request)
@@ -43,8 +46,8 @@ class TrackingController extends Controller
     public function show(string $token)
     {
         $trackingLink = TrackingLink::where('token', $token)->firstOrFail();
-
-        return view('track', compact('trackingLink'));
+        $linkUndangan = LinkUndangan::where('link_undangan', url('/share/' . $token))->first();
+        return view('track', compact('trackingLink', 'linkUndangan'));
     }
 
     public function update(Request $request, string $token)

